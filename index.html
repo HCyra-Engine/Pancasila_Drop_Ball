@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111a36">
+<meta property="og:title" content="Pancasila Drop Ball">
+<meta property="og:description" content="Di Buat oleh kelompok 6">
+<link rel="icon" href="https://i.imgur.com/bMBNu3W.png" type="image/png">
+<title>Pancasila Drop Ball — Kelompok 6</title>
+<style>
+:root {
+--background: #121a39;
+--panel: #192344;
+--panel-light: #25345d;
+--gold: #ffd15a;
+--cyan: #65dce8;
+--text: #f6f7ff;
+--muted: #b2bddc;
+--border: rgba(255, 255, 255, 0.13);
+}
+* { box-sizing: border-box; }
+body {
+min-height: 100vh;
+margin: 0;
+color: var(--text);
+font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+background:
+radial-gradient(ellipse at 50% -15%, #334b8d 0, transparent 55%),
+var(--background);
+}
+button { font: inherit; }
+button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+.app {
+width: min(1040px, 100%);
+margin: 0 auto;
+padding: 22px 18px 30px;
+}
+.top-panel {
+display: grid;
+grid-template-columns: minmax(0, 1fr) auto;
+align-items: center;
+gap: 18px;
+padding: 17px 20px;
+margin-bottom: 17px;
+border: 1px solid rgba(255, 255, 255, 0.15);
+border-radius: 20px;
+background: linear-gradient(112deg, #1c294e 0%, #293a68 56%, #1b2547 100%);
+box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18), inset 0 1px rgba(255, 255, 255, 0.08);
+}
+.brand {
+display: flex;
+align-items: center;
+gap: 13px;
+min-width: 0;
+}
+.brand-mark {
+display: grid;
+place-items: center;
+flex: 0 0 auto;
+width: 58px;
+height: 58px;
+border-radius: 16px;
+color: #4b2c10;
+font-size: 29px;
+background: linear-gradient(145deg, #ffe99a, #ffb73d);
+box-shadow: 0 5px 0 #9a6125;
+}
+.brand-kicker {
+margin-bottom: 5px;
+color: var(--cyan);
+font-size: 10px;
+font-weight: 900;
+letter-spacing: 2.1px;
+line-height: 1.4;
+}
+h1 {
+margin: 0;
+font-size: clamp(23px, 3.9vw, 39px);
+line-height: 1.04;
+letter-spacing: -1.3px;
+font-weight: 850;
+}
+h1 span { color: var(--gold); }
+.header-meta {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 12px 15px;
+border: 1px solid rgba(255, 255, 255, 0.17);
+border-radius: 13px;
+color: #e4eaff;
+background: rgba(9, 16, 38, 0.22);
+font-size: 12px;
+white-space: nowrap;
+}
+.header-meta strong { color: var(--gold); }
+.intro {
+margin: 0 auto 15px;
+text-align: center;
+}
+.intro h2 {
+margin: 0 0 7px;
+font-size: clamp(22px, 3.8vw, 34px);
+line-height: 1.2;
+letter-spacing: -0.8px;
+}
+.intro h2 span { color: var(--gold); }
+.intro p {
+max-width: 650px;
+margin: 0 auto;
+color: var(--muted);
+font-size: clamp(11px, 1.45vw, 14px);
+line-height: 1.6;
+}
+.machine {
+padding: 8px;
+border-radius: 21px;
+background: linear-gradient(135deg, #ffe9a0, #9baedb 36%, #56689d 70%, #f4c75d);
+box-shadow: 0 7px 0 #080c1b, 0 18px 35px rgba(0, 0, 0, 0.32);
+}
+.board {
+position: relative;
+overflow: hidden;
+padding: 15px 13px 14px;
+border: 1px solid rgba(255, 255, 255, 0.24);
+border-radius: 15px;
+background: linear-gradient(155deg, #283765 0%, #1b2448 55%, #111831 100%);
+}
+.board-head {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 10px;
+margin-bottom: 13px;
+}
+.board-label {
+color: #d2dcf8;
+font-size: 10px;
+font-weight: 900;
+letter-spacing: 1.5px;
+text-transform: uppercase;
+}
+.target-pill {
+max-width: 62%;
+padding: 7px 11px;
+border: 1px solid rgba(255,255,255,.24);
+border-radius: 999px;
+color: #39280e;
+background: linear-gradient(180deg, #ffe68b, #ffbf3e);
+box-shadow: 0 2px 0 #a76a1e, inset 0 1px rgba(255,255,255,.45);
+font-size: 10px;
+line-height: 1.2;
+font-weight: 900;
+white-space: normal;
+text-align: center;
+cursor: pointer;
+}
+.target-pill:active { transform: translateY(1px); }
+.holes {
+position: relative;
+z-index: 1;
+display: block;
+width: min(650px, 100%);
+aspect-ratio: 1;
+margin: 0 auto;
+border-radius: 50%;
+transform: rotate(0deg) translateZ(0);
+transform-origin: 50% 50%;
+will-change: transform;
+isolation: isolate;
+}
+.holes::before {
+content: "";
+position: absolute;
+inset: 7.5%;
+border: 5px solid #35efb0;
+border-radius: 50%;
+background:
+repeating-conic-gradient(from -9deg, transparent 0deg 17deg, rgba(101,220,232,.62) 17deg 18deg),
+radial-gradient(circle, rgba(39,66,112,.72) 0 42%, rgba(23,42,78,.28) 43% 100%);
+box-shadow: 0 0 0 2px rgba(53,239,176,.12), 0 0 22px rgba(53,239,176,.13), inset 0 0 22px rgba(0,0,0,.18);
+z-index: -1;
+}
+.holes::after {
+content: "";
+position: absolute;
+width: 20%;
+aspect-ratio: 1;
+left: 50%;
+top: 50%;
+border: 5px solid rgba(101,220,232,.8);
+border-radius: 50%;
+background: radial-gradient(circle at 35% 30%, #344b7c, #111a36 72%);
+box-shadow: 0 0 0 7px rgba(101,220,232,.08), 0 0 25px rgba(101,220,232,.14);
+transform: translate(-50%, -50%);
+z-index: -1;
+}
+.hole-card {
+position: absolute;
+left: 50%;
+top: 50%;
+width: clamp(52px, 9.8vw, 72px);
+min-width: 0;
+padding: 0;
+display: grid;
+place-items: center;
+text-align: center;
+border: 0;
+border-radius: 50%;
+background: transparent;
+box-shadow: none;
+transform: translate(-50%, -50%) translateZ(0);
+will-change: transform;
+transition: filter 180ms ease;
+}
+.hole-card.active { filter: drop-shadow(0 0 9px rgba(255,209,90,.95)); }
+.hole-card.landed { filter: drop-shadow(0 0 9px rgba(101,220,232,.95)); }
+.hole-number, .hole-caption { display: none; }
+.hole {
+position: relative;
+display: grid;
+place-items: center;
+width: 100%;
+aspect-ratio: 1;
+margin: 0;
+border: 3px solid #9caddd;
+border-radius: 50%;
+background: radial-gradient(circle at 45% 35%, #26345d 0, #0b1128 68%);
+box-shadow: inset 0 5px 8px #000c, inset 0 -1px 2px #b7c4ff38, 0 3px 0 #090e21;
+}
+.hole::after {
+position: absolute;
+inset: 4px;
+border: 1px solid rgba(255,255,255,.08);
+border-radius: 50%;
+content: "";
+}
+.hole-card:nth-child(4n + 1) .hole { border-color: #ffd06a; }
+.hole-card:nth-child(4n + 2) .hole { border-color: #65dce8; }
+.hole-card:nth-child(4n + 3) .hole { border-color: #ff8eae; }
+.hole-card:nth-child(4n) .hole { border-color: #b7a3ff; }
+.hole-card.landed .hole { box-shadow: inset 0 5px 8px #000c, 0 0 0 3px rgba(101,220,232,.12); }
+.hole-mark {
+z-index: 1;
+color: #f0f4ff;
+font-size: clamp(12px, 2.8vw, 17px);
+font-weight: 950;
+text-shadow: 0 1px 3px #000;
+}
+.ball {
+position: absolute;
+top: 0;
+left: 0;
+z-index: 5;
+width: 24px;
+height: 24px;
+border-radius: 50%;
+opacity: 0;
+pointer-events: none;
+background: radial-gradient(circle at 28% 23%, #fff 0 4%, #fff8c2 8%, #ffdf60 24%, #ff9a2e 55%, #e45319 78%, #81250f 100%);
+box-shadow: inset -3px -4px 6px #85281aaa, inset 3px 3px 5px #fff9, 0 5px 9px #0009, 0 0 13px #ffc64c90;
+will-change: transform, opacity;
+}
+.ball::after {
+position: absolute;
+top: 4px;
+left: 5px;
+width: 7px;
+height: 4px;
+border-radius: 50%;
+background: #fff9;
+content: "";
+transform: rotate(-35deg);
+}
+.controls {
+display: flex;
+justify-content: center;
+flex-wrap: wrap;
+gap: 10px;
+margin: 17px 0 10px;
+}
+button { cursor: pointer; transition: filter 150ms ease, transform 150ms ease; }
+button:hover { filter: brightness(1.06); }
+button:active { transform: translateY(1px); }
+button:disabled { opacity: 0.65; cursor: wait; }
+.primary {
+padding: 11px 19px;
+border: 0;
+border-radius: 11px;
+color: #38230e;
+background: linear-gradient(#ffe68b, #ffb82e);
+box-shadow: 0 4px 0 #a76a1e;
+font-size: 12px;
+font-weight: 950;
+}
+.secondary {
+padding: 10px 15px;
+border: 1px solid rgba(255, 255, 255, 0.14);
+border-radius: 11px;
+color: #e5eaff;
+background: linear-gradient(#354174, #242c55);
+box-shadow: 0 3px 0 #0a1025;
+font-size: 11px;
+font-weight: 800;
+}
+.hint {
+margin: 0 auto 15px;
+color: #9da9d3;
+font-size: 10px;
+line-height: 1.5;
+text-align: center;
+}
+.stats {
+display: grid;
+grid-template-columns: repeat(3, minmax(0, 1fr));
+gap: 8px;
+}
+.stat {
+padding: 10px 5px;
+border: 1px solid var(--border);
+border-radius: 12px;
+background: rgba(255, 255, 255, 0.04);
+text-align: center;
+}
+.stat-label {
+color: #9eabd5;
+font-size: 8px;
+font-weight: 900;
+letter-spacing: 1px;
+text-transform: uppercase;
+}
+.stat-value { margin-top: 3px; font-size: 18px; font-weight: 950; }
+.gold { color: var(--gold); }
+.question-backdrop {
+position: fixed;
+inset: 0;
+z-index: 20;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 16px;
+background: rgba(5, 9, 24, 0.90);
+opacity: 0;
+visibility: hidden;
+pointer-events: none;
+transition: opacity 200ms ease, visibility 200ms ease;
+}
+.question-backdrop.show {
+opacity: 1;
+visibility: visible;
+pointer-events: auto;
+}
+.question-modal {
+width: min(420px, 100%);
+padding: 20px;
+border: 1px solid rgba(255, 255, 255, 0.2);
+border-radius: 18px;
+background: linear-gradient(150deg, #293761, #171f3e 72%);
+box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+opacity: 0;
+transform: translateY(15px) scale(0.96);
+transition: opacity 200ms ease, transform 200ms ease;
+}
+.question-backdrop.show .question-modal {
+opacity: 1;
+transform: translateY(0) scale(1);
+}
+.modal-head {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 10px;
+margin-bottom: 13px;
+}
+.modal-head h3 { margin: 0; font-size: 17px; }
+.close {
+display: grid;
+place-items: center;
+width: 31px;
+height: 31px;
+border: 0;
+border-radius: 9px;
+color: #fff;
+background: rgba(255, 255, 255, 0.1);
+font-size: 20px;
+}
+.question-tag {
+display: inline-block;
+padding: 5px 9px;
+border-radius: 999px;
+color: #39280e;
+background: var(--gold);
+font-size: 10px;
+font-weight: 950;
+}
+.question-text {
+display: grid;
+place-items: center;
+min-height: 100px;
+margin: 13px 0;
+padding: 17px;
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 12px;
+color: #e3e9ff;
+background: #10172f;
+font-size: 15px;
+line-height: 1.55;
+text-align: center;
+}
+.modal-actions { display: flex; justify-content: flex-end; }
+.learning-modal { width: min(560px, 100%); max-height: min(82vh, 760px); display: flex; flex-direction: column; }
+.learning-content { overflow-y: auto; padding: 14px 16px; border: 1px solid rgba(255,255,255,.1); border-radius: 12px; color: #e3e9ff; background: #10172f; font-size: 13px; line-height: 1.65; overscroll-behavior: contain; }
+.learning-content p { margin: 0 0 10px; }
+.tutorial-backdrop {
+position: fixed;
+inset: 0;
+z-index: 30;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 16px;
+background: rgba(5, 9, 24, 0.92);
+opacity: 1;
+visibility: visible;
+transition: opacity 200ms ease, visibility 200ms ease;
+}
+.tutorial-backdrop.hidden {
+opacity: 0;
+visibility: hidden;
+pointer-events: none;
+}
+.tutorial-modal {
+width: min(430px, 100%);
+padding: 22px;
+border: 1px solid rgba(255, 255, 255, 0.17);
+border-radius: 19px;
+background: linear-gradient(145deg, #26345d, #171f3e);
+box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+transform: translateY(0) scale(1);
+transition: transform 200ms ease;
+}
+.tutorial-backdrop.hidden .tutorial-modal { transform: translateY(12px) scale(0.97); }
+.tutorial-heading { margin-bottom: 17px; text-align: center; }
+.tutorial-mark {
+display: grid;
+place-items: center;
+width: 45px;
+height: 45px;
+margin: 0 auto 11px;
+border-radius: 14px;
+color: #4b2c10;
+background: linear-gradient(145deg, #ffe99a, #ffb73d);
+box-shadow: 0 4px 0 #9a6125;
+font-size: 24px;
+}
+.tutorial-modal h2 { margin: 0 0 5px; font-size: 23px; }
+.tutorial-sub { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.tutorial-list { display: grid; gap: 8px; margin-bottom: 14px; }
+.tutorial-step {
+display: flex;
+align-items: flex-start;
+gap: 10px;
+padding: 10px;
+border: 1px solid rgba(255, 255, 255, 0.09);
+border-radius: 10px;
+color: #e0e7ff;
+background: rgba(255, 255, 255, 0.035);
+font-size: 12px;
+line-height: 1.45;
+}
+.step-number {
+display: grid;
+place-items: center;
+flex: 0 0 auto;
+width: 22px;
+height: 22px;
+border-radius: 7px;
+color: #39280e;
+background: var(--gold);
+font-size: 11px;
+font-weight: 950;
+}
+.creator-credit {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 3px;
+margin-bottom: 14px;
+padding: 12px 10px;
+border: 1px solid rgba(255, 255, 255, 0.09);
+border-radius: 11px;
+background: rgba(8, 14, 32, 0.45);
+}
+.creator-label { color: #9eacd7; font-size: 9px; font-weight: 900; letter-spacing: 1.8px; }
+.creator-credit strong { color: var(--gold); font-size: 15px; letter-spacing: 1px; }
+.creator-subtitle { color: #aeb9dc; font-size: 10px; text-align: center;}
+.start-button { width: 100%; padding: 12px 16px; }
+.toast {
+position: fixed;
+z-index: 40;
+bottom: 16px;
+left: 50%;
+max-width: 90%;
+padding: 10px 14px;
+border-radius: 10px;
+color: #17203e;
+background: #fff;
+box-shadow: 0 5px 20px #0006;
+font-size: 11px;
+font-weight: 800;
+text-align: center;
+opacity: 0;
+pointer-events: none;
+transform: translate(-50%, 10px);
+transition: opacity 180ms ease, transform 180ms ease;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+@media (max-width: 620px) {
+.app { padding: 14px 10px 22px; }
+.top-panel { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 12px 14px; margin-bottom: 14px; border-radius: 15px; }
+.brand { gap: 9px; }
+.brand-mark { width: 43px; height: 43px; border-radius: 12px; font-size: 22px; box-shadow: 0 3px 0 #9a6125; }
+.brand-kicker { font-size: 7px; letter-spacing: 1.1px; margin-bottom: 3px; }
+h1 { font-size: clamp(19px, 5.3vw, 26px); letter-spacing: -0.7px; }
+.header-meta { justify-content: center; gap: 9px; padding: 8px 10px; font-size: 10px; }
+.intro { margin-bottom: 12px; }
+.intro h2 { font-size: clamp(19px, 5vw, 26px); letter-spacing: -0.5px; }
+.intro p { font-size: 10px; }
+.machine { padding: 6px; border-radius: 17px; }
+.board { padding: 10px 6px 10px; border-radius: 12px; }
+.holes { gap: 7px 4px; }
+.hole-card { width: clamp(38px, 10.2vw, 48px); padding: 0; border-radius: 50%; }
+.hole { width: 100%; border-width: 2px; }
+.hole-mark { font-size: 10px; }
+.board-label, .target-pill { font-size: 8px; }
+.stat { padding: 9px 3px; }
+.stat-label { font-size: 7px; letter-spacing: 0.6px; }
+.stat-value { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+*, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+<main class="app">
+<header class="top-panel">
+<div class="brand">
+<div class="brand-mark" aria-hidden="true">⚽</div>
+<div>
+<div class="brand-kicker">Board Game <span aria-hidden="true">•</span> Kelompok 6</div>
+<h1>PANCASILA <span>DROP BALL</span></h1>
+</div>
+</div>
+</header>
+<section class="intro">
+<h2>Jatuhkan bola, <span>lalu diskusikan!</span></h2>
+<p>Bola jatuh dari atas dan masuk ke salah satu lubang yang paling atas</p>
+</section>
+<section class="machine" aria-label="Papan permainan">
+<div class="board" id="board">
+<div class="board-head">
+<div class="board-label">Papan drop ball</div>
+<button class="target-pill" id="learningBtn" type="button">Pencapaian Pembelajaran</button>
+</div>
+<div class="holes" id="holes"></div>
+<div class="ball" id="ball" aria-hidden="true"></div>
+</div>
+</section>
+<div class="controls">
+<button class="primary" id="dropBtn" type="button">JATUHKAN BOLA</button>
+</div>
+<p class="hint">Setiap lubang berisi satu soal yang berbeda.</p>
+<section class="stats" aria-label="Statistik permainan">
+<div class="stat">
+<div class="stat-label">Total lubang</div>
+<div class="stat-value">20</div>
+</div>
+<div class="stat">
+<div class="stat-label">Bola dijatuhkan</div>
+<div class="stat-value gold" id="dropCount">0</div>
+</div>
+<div class="stat">
+<div class="stat-label">Lubang terakhir</div>
+<div class="stat-value" id="lastTarget">—</div>
+</div>
+</section>
+</main>
+<div class="tutorial-backdrop" id="tutorialBackdrop" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
+<section class="tutorial-modal">
+<div class="tutorial-heading">
+<div class="tutorial-mark" aria-hidden="true">⚽</div>
+<h2 id="tutorialTitle">Cara Bermain</h2>
+<p class="tutorial-sub">Baca panduan singkat sebelum memulai.</p>
+</div>
+<div class="tutorial-list">
+<div class="tutorial-step"><span class="step-number">1</span><span>Tekan tombol <b>Jatuhkan Bola</b>.</span></div>
+<div class="tutorial-step"><span class="step-number">2</span><span>Bola akan jatuh masuk ke dalam lubang yang paling atas</span></div>
+<div class="tutorial-step"><span class="step-number">3</span><span>Baca soal yang muncul, lalu diskusikan jawabannya bersama kelompok.</span></div>
+<div class="tutorial-step"><span class="step-number">4</span><span>Setelah berdiskusi dengan kelompok, jawab soal tersebut oleh salah satu perwakilan dari kelompok kalian.</span></div>
+</div>
+<div class="creator-credit">
+<span class="creator-label">DIBUAT OLEH</span>
+<strong>KELOMPOK 6</strong>
+<span class="creator-subtitle">Ahmad Godjali || 25416287205037<br>Divia Fairus Shafa Salsabila || 25416287205001<br>Maulana Mahesa Jenar || 25416287205023</span>
+</div>
+<button class="primary start-button" id="startBtn" type="button">MULAI PERMAINAN</button>
+</section>
+</div>
+<div class="question-backdrop" id="questionBackdrop" role="dialog" aria-modal="true" aria-labelledby="questionTitle" aria-hidden="true">
+<section class="question-modal">
+<div class="modal-head">
+<h3 id="questionTitle">Soal Pancasila Drop Ball</h3>
+<button class="close" id="closeQuestionBtn" type="button" aria-label="Tutup soal">×</button>
+</div>
+<span class="question-tag" id="questionTag">LUBANG 01</span>
+<div class="question-text" id="questionText"></div>
+<div class="modal-actions">
+<button class="secondary" id="skipQuestionBtn" type="button">Selesai Menjawab</button>
+</div>
+</section>
+</div>
+<div class="question-backdrop" id="learningBackdrop" role="dialog" aria-modal="true" aria-labelledby="learningTitle" aria-hidden="true">
+<section class="question-modal learning-modal">
+<div class="modal-head">
+<h3 id="learningTitle">Pencapaian Pembelajaran</h3>
+<button class="close" id="closeLearningBtn" type="button" aria-label="Tutup pencapaian pembelajaran">×</button>
+</div>
+<div class="learning-content" id="learningContent">
+<p>Peserta didik mampu memahami dan menerapkan nilai-nilai Pancasila, memahami hak dan kewajiban warga negara, serta mengidentifikasi bentuk pelaksanaan dan pelanggaran hak dan kewajiban dalam kehidupan sehari-hari.<br>Melalui permainan Board Game Pancasila Drop Ball, peserta didik mampu menjawab pertanyaan, menganalisis permasalahan, menyampaikan pendapat secara santun, bekerja sama, menghargai perbedaan, dan menunjukkan sikap tanggung jawab sesuai dengan nilai-nilai Pancasila.</p>
+</div>
+</section>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<footer>
+<p style="font-size:9.5px; text-align:center; margin-top:-5px; color:#9da9d3ff;">Made with <a href="https://hcyra-engine.github.io/HC/" style="text-decoration: none; color: var(--text-muted);">HCyra-Engine</a> by AgodZz</p>
+</footer>
+<audio id="bgm" loop preload="auto">
+<source src="https://res.cloudinary.com/cvao0oj8/video/upload/v1793232827/FE.mp3" type="audio/mpeg">
+</audio>
+<audio id="sfx" preload="auto">
+<source src="https://res.cloudinary.com/cvao0oj8/video/upload/v1793235930/open_win.mp3" type="audio/mpeg">
+</audio>
+<audio id="questionSfx" preload="auto">
+<source src="https://res.cloudinary.com/cvao0oj8/video/upload/v1793236643/2N.ogg" type="audio/ogg">
+</audio>
+<script>
+(() => {
+'use strict';
+const holesElement = document.getElementById('holes');
+const boardElement = document.getElementById('board');
+const ballElement = document.getElementById('ball');
+const dropButton = document.getElementById('dropBtn');
+const tutorialBackdrop = document.getElementById('tutorialBackdrop');
+const questionBackdrop = document.getElementById('questionBackdrop');
+const learningBackdrop = document.getElementById('learningBackdrop');
+const learningButton = document.getElementById('learningBtn');
+const questionTag = document.getElementById('questionTag');
+const questionText = document.getElementById('questionText');
+const dropCountElement = document.getElementById('dropCount');
+const lastTargetElement = document.getElementById('lastTarget');
+const toastElement = document.getElementById('toast');
+const bgm = document.getElementById('bgm');
+bgm.volume = 0.25;
+const sfx = document.getElementById('sfx');
+sfx.volume = 1.0;
+document.addEventListener('click', (event) => {
+const target = event.target;
+if (!(target instanceof Element)) return;
+const button = target.closest('button, [role="button"]');
+if (!button || button.disabled) return;
+sfx.currentTime = 0;
+sfx.play().catch(() => {});
+}, true);
+const questionSfx = document.getElementById('questionSfx');
+questionSfx.volume = 0.5;
+function playQuestionSfx() {
+questionSfx.currentTime = 0;
+questionSfx.play().catch(() => {});
+}
+const questions = {
+1: 'Apa yang dimaksud dengan Pancasila sebagai dasar negara?',
+2: 'Mengapa nilai-nilai Pancasila harus diterapkan dalam kehidupan sehari-hari?',
+3: 'Jelaskan hubungan Pancasila dengan UUD Negara Republik Indonesia Tahun 1945!',
+4: 'Apa makna semboyan Bhinneka Tunggal Ika?',
+5: 'Bagaimana cara menerapkan sila ketiga Pancasila di lingkungan sekolah?',
+6: 'Apa yang dimaksud dengan hak dan kewajiban warga negara?',
+7: 'Mengapa pelaksanaan hak dan kewajiban harus seimbang?',
+8: 'Sebutkan tiga contoh hak warga negara Indonesia!',
+9: 'Sebutkan tiga contoh kewajiban warga negara Indonesia!',
+10: 'Apa saja tantangan dalam pemenuhan hak dan kewajiban warga negara?',
+11: 'Apa yang dimaksud dengan kemerdekaan berpendapat?',
+12: 'Mengapa kebebasan berpendapat harus dilakukan secara bertanggung jawab?',
+13: 'Sebutkan tiga bentuk penyampaian pendapat di muka umum!',
+14: 'Apa yang dimaksud dengan keterbukaan informasi publik?',
+15: 'Apa yang dimaksud dengan tradisi, kearifan lokal, dan budaya?',
+16: 'Sebutkan tiga contoh budaya Indonesia yang harus dilestarikan!',
+17: 'Mengapa tradisi dan budaya Indonesia perlu dilestarikan di era globalisasi?',
+18: 'Apa yang dimaksud dengan Negara Kesatuan Republik Indonesia (NKRI)?',
+19: 'Sebutkan tiga upaya untuk mempertahankan persatuan dan kesatuan NKRI!',
+20: 'Bagaimana peran pelajar dalam menjaga keutuhan NKRI?'
+};
+let isAnimating = false;
+let dropCount = 0;
+let toastTimeout = null;
+let ballAnimation = null;
+let holeCardsArray = [];
+/** @param {string} message */
+function showToast(message) {
+toastElement.textContent = message;
+toastElement.classList.add('show');
+window.clearTimeout(toastTimeout);
+toastTimeout = window.setTimeout(() => {
+toastElement.classList.remove('show');
+}, 2100);
+}
+/** @param {number} index */
+function openQuestion(index) {
+questionTag.textContent = `LUBANG ${String(index).padStart(2, '0')}`;
+questionText.textContent = questions[index] || 'Soal belum tersedia.';
+questionBackdrop.setAttribute('aria-hidden', 'false');
+questionBackdrop.classList.add('show');
+playQuestionSfx();
+document.getElementById('closeQuestionBtn').focus({ preventScroll: true });
+}
+function closeQuestion() {
+questionBackdrop.classList.remove('show');
+questionBackdrop.setAttribute('aria-hidden', 'true');
+}
+let wheelRotation = 0;
+let wheelLastFrame = 0;
+let wheelRaf = null;
+let wheelRunning = false;
+let wheelSpeed = 66;
+function createHoles() {
+const fragment = document.createDocumentFragment();
+for (let index = 1; index <= 20; index += 1) {
+const card = document.createElement('div');
+card.className = 'hole-card';
+card.dataset.hole = String(index);
+card.innerHTML = `<div class="hole"><span class="hole-mark">${String(index).padStart(2, '0')}</span></div>`;
+card.dataset.angle = String((index - 1) * 18 - 90);
+fragment.appendChild(card);
+}
+holesElement.appendChild(fragment);
+holeCardsArray = Array.from(holesElement.querySelectorAll('.hole-card'));
+positionWheelHoles();
+applyWheelRotation();
+}
+function positionWheelHoles() {
+const size = holesElement.clientWidth;
+const radius = size * (window.innerWidth <= 620 ? 0.385 : 0.395);
+for (let i = 0; i < holeCardsArray.length; i++) {
+const card = holeCardsArray[i];
+const angle = Number(card.dataset.angle) * Math.PI / 180;
+card.style.left = `${size / 2 + Math.cos(angle) * radius}px`;
+card.style.top = `${size / 2 + Math.sin(angle) * radius}px`;
+}
+applyWheelRotation();
+}
+function applyWheelRotation() {
+holesElement.style.transform = `rotate(${wheelRotation}deg) translateZ(0)`;
+const negRotation = -wheelRotation;
+for (let i = 0; i < holeCardsArray.length; i++) {
+holeCardsArray[i].style.transform = `translate(-50%, -50%) rotate(${negRotation}deg) translateZ(0)`;
+}
+}
+function startWheel() {
+if (wheelRunning) return;
+wheelRunning = true;
+wheelLastFrame = 0;
+const tick = timestamp => {
+if (!wheelRunning) {
+wheelRaf = null;
+return;
+}
+if (wheelLastFrame) {
+const delta = Math.min((timestamp - wheelLastFrame) / 1000, 0.05);
+wheelRotation = (wheelRotation + wheelSpeed * delta) % 360;
+applyWheelRotation();
+}
+wheelLastFrame = timestamp;
+wheelRaf = window.requestAnimationFrame(tick);
+};
+wheelRaf = window.requestAnimationFrame(tick);
+}
+function stopWheel() {
+wheelRunning = false;
+if (wheelRaf !== null) {
+window.cancelAnimationFrame(wheelRaf);
+wheelRaf = null;
+}
+wheelLastFrame = 0;
+}
+function getHoleAtDropPoint() {
+let bestCard = null;
+let bestDistance = Infinity;
+for (let i = 0; i < holeCardsArray.length; i++) {
+const card = holeCardsArray[i];
+const baseAngle = Number(card.dataset.angle);
+// Mengukur posisi aktual sudut relatif terhadap titik teratas (-90 deg / 270 deg)
+const currentAngle = ((baseAngle + wheelRotation + 90) % 360 + 360) % 360;
+const distance = Math.min(currentAngle, 360 - currentAngle);
+
+if (distance < bestDistance) {
+bestDistance = distance;
+bestCard = card;
+}
+}
+return bestCard;
+}
+function finishDrop(targetCard, targetIndex) {
+ballElement.style.opacity = '0';
+ballElement.style.transform = '';
+targetCard.classList.remove('active', 'spinning');
+
+for (let i = 0; i < holeCardsArray.length; i++) {
+holeCardsArray[i].classList.remove('landed', 'spinning');
+}
+targetCard.classList.add('landed');
+dropCount += 1;
+dropCountElement.textContent = String(dropCount);
+lastTargetElement.textContent = String(targetIndex).padStart(2, '0');
+
+isAnimating = false;
+dropButton.disabled = false;
+dropButton.textContent = 'JATUHKAN BOLA';
+openQuestion(targetIndex);
+}
+function dropBall() {
+if (isAnimating) return;
+isAnimating = true;
+dropButton.disabled = true;
+dropButton.textContent = 'BOLA JATUH...';
+for (let i = 0; i < holeCardsArray.length; i++) {
+holeCardsArray[i].classList.remove('active', 'landed');
+}
+stopWheel();
+const targetCard = getHoleAtDropPoint();
+if (!targetCard) {
+isAnimating = false;
+dropButton.disabled = false;
+dropButton.textContent = 'JATUHKAN BOLA';
+startWheel();
+return;
+}
+const boardRect = boardElement.getBoundingClientRect();
+const ballSize = ballElement.offsetWidth;
+const startX = boardRect.width / 2 - ballSize / 2;
+const startY = -ballSize - 2;
+const holeElement = targetCard.querySelector('.hole');
+const holeRect = holeElement.getBoundingClientRect();
+const endX = holeRect.left - boardRect.left + holeRect.width / 2 - ballSize / 2;
+const endY = holeRect.top - boardRect.top + holeRect.height / 2 - ballSize / 2;
+ballElement.style.opacity = '1';
+ballAnimation = ballElement.animate([
+{ transform: `translate(${startX}px, ${startY}px) scale(0.8)`, opacity: 0 },
+{ transform: `translate(${startX}px, ${startY + 15}px) scale(1)`, opacity: 1, offset: 0.15 },
+{ transform: `translate(${endX}px, ${endY}px) scale(0.95)`, opacity: 1, offset: 0.85 },
+{ transform: `translate(${endX}px, ${endY + 3}px) scale(0.3)`, opacity: 0 }
+], {
+duration: 800,
+easing: 'ease-in-out',
+fill: 'forwards'
+});
+ballAnimation.onfinish = () => {
+const targetIndex = Number(targetCard.dataset.hole);
+targetCard.classList.add('active');
+finishDrop(targetCard, targetIndex);
+ballAnimation = null;
+};
+ballAnimation.oncancel = () => {
+ballElement.style.opacity = '0';
+isAnimating = false;
+dropButton.disabled = false;
+dropButton.textContent = 'JATUHKAN BOLA';
+ballAnimation = null;
+startWheel();
+};
+}
+document.getElementById('startBtn').addEventListener('click', () => {
+bgm.play().catch(() => {
+showToast('Backsound gagal diputar');
+});
+tutorialBackdrop.classList.add('hidden');
+startWheel();
+window.setTimeout(() => {
+tutorialBackdrop.style.display = 'none';
+dropButton.focus({ preventScroll: true });
+}, 270);
+});
+dropButton.addEventListener('click', dropBall);
+function closeLearning() {
+learningBackdrop.classList.remove('show');
+learningBackdrop.setAttribute('aria-hidden', 'true');
+}
+learningButton.addEventListener('click', () => {
+learningBackdrop.setAttribute('aria-hidden', 'false');
+learningBackdrop.classList.add('show');
+document.getElementById('closeLearningBtn').focus({ preventScroll: true });
+});
+document.getElementById('closeLearningBtn').addEventListener('click', closeLearning);
+function closeQuestionAndResumeWheel() {
+closeQuestion();
+if (!isAnimating) startWheel();
+}
+document.getElementById('closeQuestionBtn').addEventListener('click', closeQuestionAndResumeWheel);
+document.getElementById('skipQuestionBtn').addEventListener('click', closeQuestionAndResumeWheel);
+document.addEventListener('keydown', event => {
+if (event.key === 'Escape') {
+closeQuestionAndResumeWheel();
+closeLearning();
+}
+});
+createHoles();
+let resizeTimeout = null;
+window.addEventListener('resize', () => {
+window.clearTimeout(resizeTimeout);
+resizeTimeout = window.setTimeout(positionWheelHoles, 100);
+});
+})();
+</script>
+</body>
+</html>
